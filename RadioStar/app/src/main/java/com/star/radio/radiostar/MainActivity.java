@@ -3,10 +3,14 @@ package com.star.radio.radiostar;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnPreparedListener;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.app.NotificationCompat;
@@ -56,6 +60,26 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         //buttonStopPlay.setEnabled(false);
         //buttonStopPlay.setOnClickListener(this);
 
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean initialDialogDisplayed = preferences.getBoolean("InitialDialog", false);
+        if (!initialDialogDisplayed) {
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putBoolean("InitialDialog", true);
+            editor.commit();
+
+            // Display the dialog here
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle(" Attenzione");
+            builder.setMessage(" Benvenuti nell'App Radio Star! Questa app necessita di una connessione ad internet per riprodurre la diretta basata sul sito web di www.radiostarnews.it ."
+                    + "Abilitate quindi una rete WiFi o una rete dati prima di premere il tasto Play."
+                    + "Grazie per l'attenzione! ")
+                    .setPositiveButton("Okay", new DialogInterface.OnClickListener() {
+
+                        public void onClick(DialogInterface dialog, int id) {
+                        }
+                    }).show();
+        }
+
         mFab = (FloatingActionButton) findViewById(R.id.status_fab);
     }
 
@@ -66,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
                 player.stop();
                 player.release();
                 initializeMediaPlayer();
-                mFab.setBackgroundResource(R.drawable.ic_play);
+                mFab.setImageResource(R.drawable.ic_play);
                 NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
                 notificationManager.cancel(0);
                 Intent svc=new Intent(this, BackgroundSoundService.class);
@@ -79,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
 
                 public void onPrepared(MediaPlayer mp) {
                     player.start();
-                    mFab.setBackgroundResource(R.drawable.ic_pause);
+                    mFab.setImageResource(R.drawable.ic_pause);
 
                 }
 
@@ -90,18 +114,16 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
             int duration = android.widget.Toast.LENGTH_LONG;
             android.widget.Toast toast = android.widget.Toast.makeText(context, text, duration);
             toast.show();
-            Object nm;
-            nm=(NotificationManager)getSystemService(NOTIFICATION_SERVICE);
-
-            NotificationCompat.Builder mBuilder =
-
-                    (NotificationCompat.Builder) new NotificationCompat.Builder(this)
-                            .setSmallIcon(R.drawable.ic_launcher)
-                            .setContentTitle("Radio Star")
-                            .setContentText("In Diretta");
-            PendingIntent.getActivity(this, 0, new Intent(), PendingIntent.FLAG_UPDATE_CURRENT);
+            Intent intent = new Intent(this, MainActivity.class);
+            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            NotificationCompat.Builder mBuilder = (NotificationCompat.Builder) new NotificationCompat.Builder(this)
+                    .setSmallIcon(R.drawable.ic_launcher)
+                    .setContentTitle("Radio Star")
+                    .setContentText("In Diretta")
+                    .setContentIntent(pendingIntent);
             NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            notificationManager.notify( 0, mBuilder.build());
+            notificationManager.notify(0, mBuilder.build());
+
         }
             //startPlaying();
         //Context context = getApplicationContext();
