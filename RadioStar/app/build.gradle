@@ -6,7 +6,7 @@ android {
     defaultConfig {
         applicationId "com.star.radio.radiostar"
         minSdkVersion 15
-        targetSdkVersion 'N'
+        targetSdkVersion 23
         versionCode 1
         versionName "1.0"
     }
