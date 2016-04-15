@@ -74,6 +74,6 @@
         android:layout_alignEnd="@+id/imageView"
         android:onClick="onClick"
         android:src="@drawable/ic_play"
-        android:contextClickable="false" />
+        android:contextClickable="true" />
 
 </RelativeLayout>

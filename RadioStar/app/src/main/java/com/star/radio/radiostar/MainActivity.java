@@ -74,12 +74,13 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
             }
             isPlaying=false;
         } else {
-            mFab.setBackgroundResource(R.drawable.ic_pause);
             player.prepareAsync();
             player.setOnPreparedListener(new OnPreparedListener() {
 
                 public void onPrepared(MediaPlayer mp) {
                     player.start();
+                    mFab.setBackgroundResource(R.drawable.ic_pause);
+
                 }
 
             });
