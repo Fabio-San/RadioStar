@@ -68,10 +68,11 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:clickable="true"
-        android:src="@drawable/ic_play"
         android:layout_marginBottom="51dp"
         android:layout_alignParentBottom="true"
         android:layout_alignRight="@+id/imageView"
-        android:layout_alignEnd="@+id/imageView" />
+        android:layout_alignEnd="@+id/imageView"
+        android:onClick="onClick"
+        android:src="@drawable/ic_play" />
 
 </RelativeLayout>

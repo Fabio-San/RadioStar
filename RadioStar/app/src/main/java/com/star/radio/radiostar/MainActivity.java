@@ -57,7 +57,6 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         //buttonStopPlay.setOnClickListener(this);
 
         mFab = (FloatingActionButton) findViewById(R.id.status_fab);
-
     }
 
     public void onClick(View v) {
@@ -142,9 +141,9 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
 
     //player.setOnPreparedListener(new OnPreparedListener() {
 
-            public void onPrepared(MediaPlayer mp) {
-                player.start();
-            }
+            //public void onPrepared(MediaPlayer mp) {
+    //player.start();
+            //}
 
         //});
 
