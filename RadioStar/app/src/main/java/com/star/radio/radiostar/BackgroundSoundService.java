@@ -1,15 +1,16 @@
 package com.star.radio.radiostar;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
-import android.os.Binder;
-import android.content.Intent;
-import android.os.IBinder;
+
 import android.app.Service;
-import java.io.IOException;
+import android.content.Intent;
+import android.media.MediaPlayer;
+import android.os.IBinder;
 
 public class BackgroundSoundService extends Service {
+
     private static final String TAG = null;
+
     MediaPlayer player;
+
     public IBinder onBind(Intent arg0) {
 
         return null;
