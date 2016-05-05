@@ -22,6 +22,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import java.io.IOException;
 
@@ -30,7 +31,7 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
     boolean isPlaying=false;
     private final static String RADIO_STATION_URL = "http://91.194.90.147:8010/;stream.mp3";
 
-    private ProgressBar playSeekBar;
+    //private ProgressBar playSeekBar;
 
     //private ImageButton buttonPlay;
 
@@ -87,66 +88,61 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         mFab = (FloatingActionButton) findViewById(R.id.status_fab);
     }
 
-    private boolean haveNetworkConnection() {
-        boolean haveConnectedWifi = false;
-        boolean haveConnectedMobile = false;
-
+    protected boolean isOnline() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo[] netInfo = cm.getAllNetworkInfo();
-        for (NetworkInfo ni : netInfo) {
-            if (ni.getTypeName().equalsIgnoreCase("WIFI"))
-                if (ni.isConnected())
-                    haveConnectedWifi = true;
-            if (ni.getTypeName().equalsIgnoreCase("MOBILE"))
-                if (ni.isConnected())
-                    haveConnectedMobile = true;
-        }
-        return haveConnectedWifi || haveConnectedMobile;
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnected();
     }
 
     public void onClick(View v) {
         //sul click del FAB
-        if(isPlaying){
-            if (player.isPlaying()) {
+        if(!isOnline()){
+            Context context = getApplicationContext();
+            CharSequence text = "Non sei Connesso!";
+            int duration = android.widget.Toast.LENGTH_LONG;
+            android.widget.Toast toast = android.widget.Toast.makeText(context, text, duration);
+            toast.show();
+        }
+            if(isPlaying){
+            if(player.isPlaying()) {
                 player.stop();
                 player.release();
                 initializeMediaPlayer();
-                mFab.setImageResource(R.drawable.ic_play);
                 NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
                 notificationManager.cancel(0);
+                mFab.setImageResource(R.drawable.ic_play);
+                isPlaying=false;
             }
-            isPlaying=false;
 
         } else {
+            if(isOnline()){
             player.prepareAsync();
             player.setOnPreparedListener(new OnPreparedListener() {
 
                 public void onPrepared(MediaPlayer mp) {
                     player.start();
                     mFab.setImageResource(R.drawable.ic_pause);
-
                 }
 
             });
             isPlaying=true;
             player.setLooping(true);
             player.isLooping();
-            Context context = getApplicationContext();
-            CharSequence text = "In Connessione...";
-            int duration = android.widget.Toast.LENGTH_LONG;
-            android.widget.Toast toast = android.widget.Toast.makeText(context, text, duration);
-            toast.show();
-            Intent intent = new Intent(this, MainActivity.class);
-            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-            NotificationCompat.Builder mBuilder = (NotificationCompat.Builder) new NotificationCompat.Builder(this)
-                    .setSmallIcon(R.drawable.ic_launcher)
-                    .setContentTitle("Radio Star")
-                    .setContentText("In Diretta")
-                    .setContentIntent(pendingIntent);
-            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            notificationManager.notify(0, mBuilder.build());
-
-        }
+                Context context = getApplicationContext();
+                CharSequence text = "In Connessione..";
+                int duration = android.widget.Toast.LENGTH_LONG;
+                android.widget.Toast toast = android.widget.Toast.makeText(context, text, duration);
+                toast.show();
+                Intent intent = new Intent(this, MainActivity.class);
+                PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                NotificationCompat.Builder mBuilder = (NotificationCompat.Builder) new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.drawable.ic_launcher)
+                        .setContentTitle("Radio Star")
+                        .setContentText("In Diretta")
+                        .setContentIntent(pendingIntent);
+                NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                notificationManager.notify(0, mBuilder.build());
+            }
             //startPlaying();
         //Context context = getApplicationContext();
         //CharSequence text = "In Connessione...";
@@ -169,7 +165,8 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         //stopPlaying();
         //Intent svc=new Intent(this, BackgroundSoundService.class);
         //startService(svc);
-        }
+                 }
+            }
     //}
 
     //private void startPlaying() {
