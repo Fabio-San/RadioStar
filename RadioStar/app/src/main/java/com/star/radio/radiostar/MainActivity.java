@@ -75,9 +75,9 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
             // Display the dialog here
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle(" Attenzione");
-            builder.setMessage(" Benvenuti nell'App Radio Star! Questa app necessita di una connessione ad internet per riprodurre la diretta basata sul sito web di www.radiostarnews.it ."
-                    + "Abilitate quindi una rete WiFi o una rete dati prima di premere il tasto Play."
-                    + "Grazie per l'attenzione! ")
+            builder.setMessage(" Benvenuti nell'App Radio Star! Questa app necessita di una connessione ad internet per riprodurre la diretta basata sul sito web di www.radiostarnews.it."
+                    + " Abilitate quindi una rete WiFi o una rete dati prima di premere il tasto Play."
+                    + "Grazie per l'attenzione!")
                     .setPositiveButton("Okay", new DialogInterface.OnClickListener() {
 
                         public void onClick(DialogInterface dialog, int id) {

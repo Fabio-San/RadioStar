@@ -60,7 +60,8 @@
         android:cropToPadding="false"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_below="@+id/mediaController1" />
+        android:layout_below="@+id/mediaController1"
+        android:layout_alignParentBottom="true" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/status_fab"
